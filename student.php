@@ -30,8 +30,8 @@ if(!isset($_SESSION['Student_name'])){
       <h3>hi, <span>Student</span></h3>
       <h1>welcome <span><?php echo $_SESSION['Student_name'] ?></span></h1>
       <p>this is an Student page</p>
-      <a href="login_form.php" class="btn">login</a>
-      <a href="register_form.php" class="btn">register</a>
+      <a href="login.php" class="btn">login</a>
+      <a href="register.php" class="btn">register</a>
       <a href="logout.php" class="btn">logout</a>
    </div>
 
