@@ -1,13 +1,5 @@
 <?php
 
-@include 'config.php';
-
-session_start();
-
-if(!isset($_SESSION['Student_name'])){
-   header('location:login.php');
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -31,9 +23,9 @@ if(!isset($_SESSION['Student_name'])){
    <link href="style/taskbar.css" rel="stylesheet" type="text/css">
 
 <div class="topnav">
-  <a class="active" href="student.php">Home</a>
-  <a href="stuSelect.php">Select</a>
-  <a href="stuView.php">View</a>
+  <a class="active" href="supervisor.php">Home</a>
+  <a href="supAdd.php">Add</a>
+  <a href="supUpdate.php">Update</a>
 
 </div>
 

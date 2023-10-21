@@ -1,13 +1,5 @@
 <?php
 
-@include 'config.php';
-
-session_start();
-
-if(!isset($_SESSION['Student_name'])){
-   header('location:login.php');
-}
-
 ?>
 
 <!DOCTYPE html>
