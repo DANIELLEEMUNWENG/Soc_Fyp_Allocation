@@ -2,34 +2,42 @@
 
 @include 'config.php';
 
-if(isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $pass = md5($_POST['password']);
+    $cpass = md5($_POST['cpassword']);
+    $user_type = $_POST['user_type'];
 
-   $name = mysqli_real_escape_string($conn, $_POST['name']);
-   $email = mysqli_real_escape_string($conn, $_POST['email']);
-   $pass = md5($_POST['password']);
-   $cpass = md5($_POST['cpassword']);
-   $user_type = $_POST['user_type'];
+    // Check if the user already exists in the corresponding table based on user type
+    $select = "SELECT * FROM tbl_user WHERE email = '$email'";
+    $result = mysqli_query($conn, $select);
 
-   $select = " SELECT * FROM tbl_user WHERE email = '$email' && password = '$pass' ";
+    if (mysqli_num_rows($result) > 0) {
+        $error[] = 'User already exists!';
+    } else {
+        if ($pass != $cpass) {
+            $error[] = 'Password not matched!';
+        } else {
+            // Insert the user into the appropriate table based on user type
+            if ($user_type === 'Student') {
+                $insert = "INSERT INTO tbl_student (name, email, password, user_type) VALUES ('$name', '$email', '$pass','$user_type')";
+            } elseif ($user_type === 'Coordinator') {
+                $insert = "INSERT INTO tbl_coordinator (name, email, password, user_type) VALUES ('$name', '$email', '$pass', '$user_type')";
+            } elseif ($user_type === 'Supervisor') {
+                $insert = "INSERT INTO tbl_supervisor (name, email, password, user_type) VALUES ('$name', '$email', '$pass',  '$user_type')";
+            } else {
+                $error[] = 'Invalid user type';
+            }
 
-   $result = mysqli_query($conn, $select);
+            if (isset($insert)) {
+                mysqli_query($conn, $insert);
+                header('location: login.php');
+            }
+        }
+    }
+}
 
-   if(mysqli_num_rows($result) > 0){
-
-      $error[] = 'user already exist!';
-
-   }else{
-
-      if($pass != $cpass){
-         $error[] = 'password not matched!';
-      }else{
-         $insert = "INSERT INTO tbl_user(name, email, password, user_type) VALUES('$name','$email','$pass','$user_type')";
-         mysqli_query($conn, $insert);
-         header('location:login.php');
-      }
-   }
-
-};
 
 
 ?>
@@ -64,9 +72,9 @@ if(isset($_POST['submit'])){
       <input type="password" name="password" required placeholder="enter your password">
       <input type="password" name="cpassword" required placeholder="confirm your password">
       <select name="user_type">
-         <option value="Student">student</option>
-         <option value="Supervisor">supervisor</option>
-         <option value="Coordinator">coordinator</option>
+         <option value="Student">Student</option>
+         <option value="Supervisor">Supervisor</option>
+         <option value="Coordinator">Coordinator</option>
       </select>
       <input type="submit" name="submit" value="register now" class="form-btn">
       <p>already have an account? <a href="login.php">login now</a></p>
