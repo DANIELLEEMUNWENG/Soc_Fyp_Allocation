@@ -12,9 +12,13 @@ if(isset($_POST['submit'])){
   // $cpass = md5($_POST['cpassword']);
    //$user_type = $_POST['user_type'];
 
-   $select = " SELECT * FROM tbl_user WHERE email = '$email' && password = '$pass' ";
+   $sql = "SELECT * FROM tbl_student WHERE email = '$email' AND password = '$pass'
+   UNION
+   SELECT * FROM tbl_coordinator WHERE email = '$email' AND password = '$pass'
+   UNION
+   SELECT * FROM tbl_supervisor WHERE email = '$email' AND password = '$pass'";
 
-   $result = mysqli_query($conn, $select);
+   $result = mysqli_query($conn, $sql);
 
    if(mysqli_num_rows($result) > 0){
 
