@@ -1,4 +1,12 @@
 <?php
+@include 'config.php';
+
+if ($conn->connect_error) {
+   die("Connection failed: " . $conn->connect_error);
+}
+$sql = " SELECT * FROM tbl_topic_selection ";
+$result = $conn->query($sql);
+
 
 ?>
 
@@ -16,6 +24,24 @@
    <a href="logout.php" class="btn">logout</a>
 </div>
 <div class="clear"></div>
+<style>
+table, th,td {
+   
+   border: 2px solid black;
+  border-collapse: collapse;
+  width: 50%;
+  text-align: left;
+  padding: 8px;
+}
+table.center {
+  margin-left: auto; 
+  margin-right: auto;
+}
+
+tr:nth-child(even) {
+  background-color: #D6EEEE;
+}
+</style>
 </head>
 <body>
    
@@ -24,13 +50,37 @@
 
 <div class="topnav">
   <a class="active" href="coordinator.php">Home</a>
-  <a href="corSelect.php">Select</a>
+  <a href="corSelect.php">Results</a>
   <a href="corView.php">View</a>
   <a href="corAssign.php">Assign</a>
   <a href="corDelete.php">Delete</a>
 </div>
 
 </div>
+<table class="center">
+            <tr>
+                <th style="width:7%">Student ID</th>
+                <th> List of Topics  </th>
 
+                
+            </tr>
+            <!-- PHP CODE TO FETCH DATA FROM ROWS -->
+            <?php 
+                // LOOP TILL END OF DATA
+                while($rows=$result->fetch_assoc())
+                {
+            ?>
+            <tr>
+                <!-- FETCHING DATA FROM EACH
+                    ROW OF EVERY COLUMN -->
+                <td><?php echo $rows['student_id'];?></td>
+                <td><?php echo $rows['listTopics'];?></td>
+
+                
+            </tr>
+            <?php
+                }
+            ?>
+        </table>
 </body>
 </html>
