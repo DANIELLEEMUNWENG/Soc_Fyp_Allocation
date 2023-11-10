@@ -75,7 +75,7 @@ tr:nth-child(even) {
             <tr>
                 <!-- FETCHING DATA FROM EACH
                     ROW OF EVERY COLUMN -->
-                <td><?php echo $rows['code'];?></td>
+                <td><?php echo $rows['topic_id'];?></td>
                 <td><?php echo $rows['listTopics'];?></td>
                 
             </tr>
