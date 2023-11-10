@@ -1,31 +1,32 @@
 <?php
-@include('config.php');
-
-$code = $_POST['code'];
-$topic_name = $_POST['listTopics'];
+@include 'config.php';
 
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+   die("Connection failed: " . $conn->connect_error);
 }
+// Collect topic information and supervisor_id from the form
+$listTopics = $_POST['listTopics'];
+$supervisor_id = $_POST['supervisor_id'];
+$topic_id=$_POST['topic_id'];
+// Verify that the supervisor_id exists in tbl_supervisor
+$check_query = "SELECT id FROM tbl_supervisor WHERE id = '$supervisor_id'";
+$check_result = $conn->query($check_query);
 
-// Check if the 'code' value already exists in the database (excluding 0)
-$checkSql = "SELECT code FROM tbl_topic WHERE code = '$code' OR (code = 0 AND '$code' = 0)";
-$result = $conn->query($checkSql);
-
-if ($result->num_rows == 0) {
-    // 'code' is not in the database, so insert the new record
-    $sql = "INSERT INTO tbl_topic (code, listTopics) VALUES ('$code', '$topic_name')";
-
-    if ($conn->query($sql) === TRUE) {
+if ($check_result->num_rows > 0) {
+    // The supervisor_id exists, so insert the topic into tbl_topic
+    $insert_query = "INSERT INTO tbl_topic (listTopics,topic_id, supervisor_id) VALUES ('$listTopics','$topic_id', '$supervisor_id')";
+    
+    if ($conn->query($insert_query) === TRUE) {
         echo "Topic added successfully.";
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $conn->error;
     }
 } else {
-    echo "Error: The 'code' value already exists in the database.";
+    echo "Supervisor with ID $supervisor_id does not exist.";
 }
 
-$conn->close();
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,6 +36,7 @@ $conn->close();
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>SOC FYP ALLOCATION SYSTEM</title>
    <link rel="stylesheet" type="text/css" href="style/styles.css">
+   <link rel="stylesheet" type="text/css" href="style/custom.css">
 </head>
 <body>
 <div class="container">
@@ -51,11 +53,13 @@ $conn->close();
       <a href="supUpdate.php">Update</a>
    </div>
    <form action="" method="post">
-      Code: <input type="text" name="code"><br>
-      Topic: <br>
-      <textarea name="listTopics" rows="5" cols="40"></textarea><br>
-      <input type="submit" value="Add Topic">
-   </form>
+   Topic ID: <input type="text" name="topic_id"><br>
+    Topic: <br>
+    <textarea name="listTopics" rows="5" cols="40"></textarea><br>
+    Supervisor ID: <input type="text" name="supervisor_id">
+    <input type="submit" value="Add Topic">
+</form>
+
 </div>
 </body>
 </html>
