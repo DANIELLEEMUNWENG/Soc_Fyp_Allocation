@@ -54,7 +54,7 @@ tr:nth-child(even) {
 
 <div class="topnav">
   <a class="active" href="coordinator.php">Home</a>
-  <a href="corSelect.php">Select</a>
+  <a href="corSelect.php">Results</a>
   <a href="corView.php">View</a>
   <a href="corAssign.php">Assign</a>
   <a href="corDelete.php">Delete</a>
@@ -64,7 +64,7 @@ tr:nth-child(even) {
 
 <table class="center">
             <tr>
-                <th style="width:7%">Code</th>
+                <th style="width:7%">Supervisor ID</th>
                 <th> List of Topics </th>
                 
             </tr>
@@ -77,7 +77,7 @@ tr:nth-child(even) {
             <tr>
                 <!-- FETCHING DATA FROM EACH
                     ROW OF EVERY COLUMN -->
-                <td><?php echo $rows['code'];?></td>
+                <td><?php echo $rows['supervisor_id'];?></td>
                 <td><?php echo $rows['listTopics'];?></td>
                 
             </tr>
