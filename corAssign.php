@@ -22,13 +22,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $selected_topic = $_POST['selected_topic']; // Get the selected topic from the form
 
     if (!empty($student_id) && !empty($selected_topic)) {
-        // Insert the assignment into the tbl_topic_selection table
-        $insert_query = "INSERT INTO tbl_topic_selection (student_id, listTopics, assigned) VALUES ('$student_id', '$selected_topic', 1)";
-        
-        // Execute the query
-        if ($conn->query($insert_query) === TRUE) {
-            echo "Topic assigned successfully.";
-            // You can also update the availability of the topic in the tbl_topic table here if needed
+        // Retrieve supervisor_id along with other data from tbl_topic
+        $selectTopicSql = "SELECT listTopics, supervisor_id FROM tbl_topic WHERE listTopics = ?";
+        $stmtSelect = $conn->prepare($selectTopicSql);
+
+        if ($stmtSelect) {
+            $stmtSelect->bind_param("s", $selected_topic);
+
+            if ($stmtSelect->execute()) {
+                $stmtSelect->store_result();
+                $stmtSelect->bind_result($listTopics, $supervisor_id);
+
+                // Fetch supervisor_id
+                $stmtSelect->fetch();
+
+                // Insert the assignment into the tbl_topic_selection table
+                $insert_query = "INSERT INTO tbl_topic_selection (student_id, listTopics, supervisor_id, assigned) VALUES (?, ?, ?, 1)";
+                
+                // Execute the query
+                $stmtInsert = $conn->prepare($insert_query);
+
+                if ($stmtInsert) {
+                    $stmtInsert->bind_param("iss", $student_id, $listTopics, $supervisor_id);
+
+                    if ($stmtInsert->execute()) {
+                        echo "Topic assigned successfully. Supervisor ID: $supervisor_id";
+                        // You can also update the availability of the topic in the tbl_topic table here if needed
+                    } else {
+                        echo "Error: " . $stmtInsert->error;
+                    }
+
+                    $stmtInsert->close();
+                } else {
+                    echo "Error: " . $conn->error;
+                }
+
+                $stmtSelect->close();
+            } else {
+                echo "Error: " . $stmtSelect->error;
+            }
         } else {
             echo "Error: " . $conn->error;
         }
@@ -56,6 +88,43 @@ echo "it stops here (after form check)";
    <a href="logout.php" class="btn">logout</a>
 </div>
 <div class="clear"></div>
+<style>
+    form {
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f5f5f5;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    select, input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 12px;
+        box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+</style>
+
+
 </head>
 <body>
    
@@ -64,7 +133,7 @@ echo "it stops here (after form check)";
 
    <div class="topnav">
       <a class="active" href="coordinator.php">Home</a>
-      <a href="corSelect.php">Select</a>
+      <a href="corSelect.php">Results</a>
       <a href="corView.php">View</a>
       <a href="corAssign.php">Assign</a>
       <a href="corDelete.php">Delete</a>

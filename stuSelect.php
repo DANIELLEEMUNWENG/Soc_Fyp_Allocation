@@ -6,35 +6,56 @@ if ($conn->connect_error) {
 }
 session_start();
 
-
-
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_topic'])) {
     $student_id = $_SESSION['student_id']; // You should have a session variable for student ID
     $selectedTopicId = $_POST['selected_topic_id'];
     if (!isset($_SESSION['student_id'])) {
-        // Redirect if user is not logged in
+        // Redirect if the user is not logged in
         header("Location: login.php"); // Change 'login.php' to the appropriate login page
         exit();
     }
 
-    // Insert the selected topic into the tbl_topic_selection table
-    $insertSql = "INSERT INTO tbl_topic_selection (student_id, listTopics) VALUES (?, ?)";
-    $stmt = $conn->prepare($insertSql);
+    // Retrieve supervisor_id along with other data from tbl_topic
+    $selectTopicSql = "SELECT listTopics, supervisor_id FROM tbl_topic WHERE listTopics = ?";
+    $stmtSelect = $conn->prepare($selectTopicSql);
 
-    if ($stmt) {
-        $stmt->bind_param("is", $student_id, $selectedTopicId);
+    if ($stmtSelect) {
+        $stmtSelect->bind_param("s", $selectedTopicId);
 
-        if ($stmt->execute()) {
-            echo "Topic selection successful.";
+        if ($stmtSelect->execute()) {
+            $stmtSelect->store_result();
+            $stmtSelect->bind_result($listTopics, $supervisor_id);
+
+            // Fetch supervisor_id
+            $stmtSelect->fetch();
+
+            // Insert the selected topic into the tbl_topic_selection table
+            $insertSql = "INSERT INTO tbl_topic_selection (student_id, listTopics, supervisor_id) VALUES (?, ?, ?)";
+            $stmtInsert = $conn->prepare($insertSql);
+
+            if ($stmtInsert) {
+                $stmtInsert->bind_param("iss", $student_id, $selectedTopicId, $supervisor_id);
+
+                if ($stmtInsert->execute()) {
+                    echo "Topic selection successful. Supervisor ID: $supervisor_id";
+                } else {
+                    echo "Error: " . $stmtInsert->error;
+                }
+
+                $stmtInsert->close();
+            } else {
+                echo "Error: " . $conn->error;
+            }
+
+            $stmtSelect->close();
         } else {
-            echo "Error: " . $stmt->error;
+            echo "Error: " . $stmtSelect->error;
         }
-
-        $stmt->close();
     } else {
         echo "Error: " . $conn->error;
     }
 }
+
 
 // SQL query to select data from the tbl_topic table
 $sql = "SELECT * FROM tbl_topic";

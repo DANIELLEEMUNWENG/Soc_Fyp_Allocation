@@ -25,7 +25,7 @@ if (isset($_POST['submit'])) {
         if ($row['user_type'] == 'Supervisor') {
             $_SESSION['Supervisor_name'] = $row['name'];
             // Set the user's ID in the session
-            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['supervisor_id'] = $row['id'];
             header('location: supervisor.php');
         } elseif ($row['user_type'] == 'Student') {
             $_SESSION['Student_name'] = $row['name'];

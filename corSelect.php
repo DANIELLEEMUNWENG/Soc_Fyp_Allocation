@@ -25,22 +25,32 @@ $result = $conn->query($sql);
 </div>
 <div class="clear"></div>
 <style>
-table, th,td {
-   
+table, th, td {
    border: 2px solid black;
-  border-collapse: collapse;
-  width: 50%;
-  text-align: left;
-  padding: 8px;
+   border-collapse: collapse;
+   width: 50%;
+   text-align: left;
+   padding: 8px;
 }
+
 table.center {
   margin-left: auto; 
   margin-right: auto;
+}
+th:nth-child(1),
+      td:nth-child(1) {
+         width: 5%; /* Adjust the width as needed */
+      }
+
+th:nth-child(3),
+td:nth-child(3) {
+  width: 5%; /* Adjust the width as needed */
 }
 
 tr:nth-child(even) {
   background-color: #D6EEEE;
 }
+
 </style>
 </head>
 <body>
@@ -59,8 +69,9 @@ tr:nth-child(even) {
 </div>
 <table class="center">
             <tr>
-                <th style="width:7%">Student ID</th>
+                <th style="width:-50%">Student ID</th>
                 <th> List of Topics  </th>
+                <th> Supervisor ID  </th>
 
                 
             </tr>
@@ -75,6 +86,7 @@ tr:nth-child(even) {
                     ROW OF EVERY COLUMN -->
                 <td><?php echo $rows['student_id'];?></td>
                 <td><?php echo $rows['listTopics'];?></td>
+                <td><?php echo $rows['supervisor_id'];?></td>
 
                 
             </tr>
