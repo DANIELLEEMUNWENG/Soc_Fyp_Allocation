@@ -1,52 +1,47 @@
 <?php
-
 @include 'config.php';
 
 session_start();
 
-if(isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
 
-  // $name = mysqli_real_escape_string($conn, $_POST['name']);
-   $email = mysqli_real_escape_string($conn, $_POST['email']);
-   $pass = md5($_POST['password']);
-  // $cpass = md5($_POST['cpassword']);
-   //$user_type = $_POST['user_type'];
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $pass = md5($_POST['password']);
 
-   $sql = "SELECT * FROM tbl_student WHERE email = '$email' AND password = '$pass'
+    $sql = "SELECT * FROM tbl_student WHERE email = '$email' AND password = '$pass'
    UNION
    SELECT * FROM tbl_coordinator WHERE email = '$email' AND password = '$pass'
    UNION
    SELECT * FROM tbl_supervisor WHERE email = '$email' AND password = '$pass'";
 
-   $result = mysqli_query($conn, $sql);
+    $result = mysqli_query($conn, $sql);
 
-   if(mysqli_num_rows($result) > 0){
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_array($result);
 
-      $row = mysqli_fetch_array($result);
+        // Retrieve the user's auto-generated student_id from the database
+        $user_id = $row['student_id'];
 
-      if($row['user_type'] == 'Supervisor'){
-
-         $_SESSION['Supervisor_name'] = $row['name'];
-         header('location:supervisor.php');
-
-      }elseif($row['user_type'] == 'Student'){
-
-         $_SESSION['Student_name'] = $row['name'];
-        header('location:student.php');
-
-      }
-      elseif($row['user_type'] == 'Coordinator'){
-
-        $_SESSION['Coordinator_name'] = $row['name'];
-        header('location:coordinator.php');
-
-     }
-     
-   }else{
-      $error[] = 'incorrect email or password!';
-   }
-
-};
+        if ($row['user_type'] == 'Supervisor') {
+            $_SESSION['Supervisor_name'] = $row['name'];
+            // Set the user's ID in the session
+            $_SESSION['user_id'] = $row['id'];
+            header('location: supervisor.php');
+        } elseif ($row['user_type'] == 'Student') {
+            $_SESSION['Student_name'] = $row['name'];
+            // Set the user's ID in the session
+            $_SESSION['student_id'] = $row['id'];
+            header('location: student.php');
+        } elseif ($row['user_type'] == 'Coordinator') {
+            $_SESSION['Coordinator_name'] = $row['name'];
+            // Set the user's ID in the session
+            $_SESSION['coordinator_id'] = $row['id'];
+            header('location: coordinator.php');
+        }
+    } else {
+        $error[] = 'Incorrect email or password!';
+    }
+}
 ?>
 
 <!DOCTYPE html>
