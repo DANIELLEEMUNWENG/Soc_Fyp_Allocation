@@ -5,10 +5,13 @@
 session_start();
 
 if(!isset($_SESSION['Student_name'])){
-   header('location:login.php');
+   header('location: login.php');
+   exit();
+   
 }
 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
