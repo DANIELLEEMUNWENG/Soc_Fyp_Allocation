@@ -32,7 +32,7 @@ if(!isset($_SESSION['Coordinator_name'])){
 
 <div class="topnav">
   <a class="active" href="coordinator.php">Home</a>
-  <a href="corSelect.php">Select</a>
+  <a href="corSelect.php">Results</a>
   <a href="corView.php">View</a>
   <a href="corAssign.php">Assign</a>
   <a href="corDelete.php">Delete</a>
