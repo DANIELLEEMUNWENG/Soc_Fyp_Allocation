@@ -2,6 +2,9 @@
 
 @include 'config.php';
 
+// Start session
+session_start();
+
 if (isset($_POST['submit'])) {
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
@@ -32,15 +35,24 @@ if (isset($_POST['submit'])) {
 
             if (isset($insert)) {
                 mysqli_query($conn, $insert);
+
+                // Get the auto-generated ID
+                $user_id = mysqli_insert_id($conn);
+
+                // Set session variables
+                $_SESSION['user_id'] = $user_id;
+                $_SESSION['user_email'] = $email;
+                $_SESSION['user_type'] = $user_type;
+
+                // Redirect to the login page or any other page as needed
                 header('location: login.php');
             }
         }
     }
 }
 
-
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
