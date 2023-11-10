@@ -14,21 +14,23 @@ if ($result === FALSE) {
 }
 
 // Check if a specific code is provided for deletion
-if (isset($_GET['code'])) {
-    $code = $_GET['code'];
+// Check if a specific code is provided for deletion
+if (isset($_GET['listTopics'])) {
+    $listTopics = $_GET['listTopics'];
 
     // Sanitize the code to prevent SQL injection
-    $code = mysqli_real_escape_string($conn, $code);
+    $code = mysqli_real_escape_string($conn, $listTopics); // Pass $conn as the first argument
 
-    // SQL query to delete the record where "code" is equal to 'code'
-    $deleteSql = "DELETE FROM tbl_topic WHERE code = '$code'";
+    // SQL query to delete the record where "listTopics" is equal to 'listTopics'
+    $deleteSql = "DELETE FROM tbl_topic WHERE listTopics = '$code'";
 
     if ($conn->query($deleteSql) === TRUE) {
-        echo "Record with code '$code' deleted successfully.";
+        echo "Record with topic '$listTopics' deleted successfully.";
     } else {
-        echo "Error deleting record with code '$code': " . $conn->error;
+        echo "Error deleting record with topic '$listTopics': " . $conn->error;
     }
 }
+
 ?>
 
 
@@ -72,7 +74,7 @@ tr:nth-child(even) {
 
 <div class="topnav">
   <a class="active" href="coordinator.php">Home</a>
-  <a href="corSelect.php">Select</a>
+  <a href="corSelect.php">Results</a>
   <a href="corView.php">View</a>
   <a href="corAssign.php">Assign</a>
   <a href="corDelete.php">Delete</a>
@@ -82,7 +84,7 @@ tr:nth-child(even) {
 
 <table class="center">
             <tr>
-                <th style="width:7%">Code</th>
+                <th style="width:7%">Supervisor Id</th>
                 <th> List of Topics </th>
                 
             </tr>
@@ -95,11 +97,11 @@ tr:nth-child(even) {
             <tr>
                 <!-- FETCHING DATA FROM EACH
                     ROW OF EVERY COLUMN -->
-                <td><?php echo $rows['code'];?></td>
+                <td><?php echo $rows['supervisor_id'];?></td>
                 <td><?php echo $rows['listTopics'];?></td>
                 <!-- Add a Delete button to each row -->
                 <td>
-            <a href="?code=<?php echo $rows['code']; ?>">Delete</a>
+            <a href="?listTopics=<?php echo $rows['listTopics']; ?>">Delete</a>
         </td>
             </tr>
             <?php
