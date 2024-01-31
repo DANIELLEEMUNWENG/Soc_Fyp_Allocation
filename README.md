@@ -1,8 +1,9 @@
 # Soc_Fyp_Allocation
+Website Interface
 ![Screenshot (300)](https://github.com/DANIELLEEMUNWENG/Soc_Fyp_Allocation/assets/116176167/7fc1411a-55e6-4771-86ef-1874b7d75de1)
-My Login Page
+
 ![Screenshot (19)](https://github.com/DANIELLEEMUNWENG/Soc_Fyp_Allocation/assets/116176167/14e1f1f4-11bc-40d1-8dad-b48496c2a8c1)
-My resgister Page
+
 ![Screenshot (21)](https://github.com/DANIELLEEMUNWENG/Soc_Fyp_Allocation/assets/116176167/b5a83fc0-bbd0-4f09-add1-a76efd1d318b)
 ![Screenshot (22)](https://github.com/DANIELLEEMUNWENG/Soc_Fyp_Allocation/assets/116176167/36204a30-bf15-4c75-88a5-d3e0188f1440)
 ![Screenshot (23)](https://github.com/DANIELLEEMUNWENG/Soc_Fyp_Allocation/assets/116176167/3e21be4f-67c3-4520-8699-e32b25fd13fa)
